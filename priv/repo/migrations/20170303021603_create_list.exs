@@ -4,7 +4,7 @@ defmodule PhoenixTrello.Repo.Migrations.CreateList do
   def change do
     create table(:lists) do
       add :name, :string
-      add :board_id, references(:board, on_delete: :nothing)
+      add :board_id, references(:boards, on_delete: :nothing)
 
       timestamps()
     end

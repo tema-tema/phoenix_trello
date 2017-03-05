@@ -6,7 +6,7 @@ defmodule PhoenixTrello.Repo.Migrations.CreateUser do
       add :first_name, :string
       add :last_name, :string
       add :email, :string
-      add :crypted_password, :string, null: false
+      add :encrypted_password, :string, null: false
 
       timestamps()
     end

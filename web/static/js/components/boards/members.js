@@ -4,9 +4,9 @@ import classnames               from 'classnames';
 import PageClick                from 'react-page-click';
 import Actions                  from '../../actions/current_board';
 
-export default class BoardUsers extends React.Component {
+export default class BoardMembers extends React.Component {
     _renderUsers() {
-        return this.props.members.map((user) => {
+        return this.props.members.map((member) => {
             const index = this.props.connectedUsers.findIndex((cu) => {
                 return cu.id === user.id;
             });
@@ -14,8 +14,8 @@ export default class BoardUsers extends React.Component {
             const classes = classnames({ connected: index != -1 });
 
             return (
-                <li className={classes} key={user.id}>
-                    <ReactGravatar className="react-gravatar" email={user.email} https/>
+                <li className={classes} key={member.id}>
+                    <ReactGravatar className="react-gravatar" email={member.email} https/>
                 </li>
             );
         });

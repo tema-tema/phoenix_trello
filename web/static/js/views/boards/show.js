@@ -1,11 +1,16 @@
 import React, {PropTypes}   from 'react';
 import { connect }          from 'react-redux';
+import {DragDropContext}    from 'react-dnd';
+import HTML5Backend         from 'react-dnd-html5-backend';
 
 import Actions              from '../../actions/current_board';
 import Constants            from '../../constants';
 import { setDocumentTitle } from '../../utils';
-import BoardMembers          from '../../components/boards/users';
+import ListForm             from '../../components/lists/form';
+import ListCard             from '../../components/lists/card';
+import BoardMembers           from '../../components/boards/members';
 
+@DragDropContext(HTML5Backend)
 
 class BoardsShowView extends React.Component {
     componentDidMount() {
@@ -16,6 +21,19 @@ class BoardsShowView extends React.Component {
         }
 
         this.props.dispatch(Actions.connectToChannel(socket, this.props.params.id));
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        const { socket } = this.props;
+        const { currentBoard } = nextProps;
+
+        if (currentBoard.name !== undefined) setDocumentTitle(currentBoard.name);
+
+        if (socket) {
+            return false;
+        }
+
+        this.props.dispatch(Actions.connectToChannel(nextProps.socket, this.props.params.id));
     }
 
     componentWillUnmount() {
@@ -41,7 +59,7 @@ class BoardsShowView extends React.Component {
     }
 
     _renderLists() {
-        const { lists, channel, id, addingNewCardInListId } = this.props.currentBoard;
+        const { lists, channel, editingListId, id, addingNewCardInListId } = this.props.currentBoard;
 
         return lists.map((list) => {
             return (
@@ -50,6 +68,10 @@ class BoardsShowView extends React.Component {
                     boardId={id}
                     dispatch={this.props.dispatch}
                     channel={channel}
+                    isEditing={editingListId === list.id}
+                    onDropCard={::this._handleDropCard}
+                    onDropCardWhenEmpty={::this._handleDropCardWhenEmpty}
+                    onDrop={::this._handleDropList}
                     isAddingNewCard={addingNewCardInListId === list.id}
                     {...list} />
             );
@@ -90,7 +112,6 @@ class BoardsShowView extends React.Component {
         this.props.dispatch(Actions.showForm(false));
     }
 
-
     render() {
         const { fetching, name } = this.props.currentBoard;
 
@@ -118,13 +139,12 @@ class BoardsShowView extends React.Component {
             </div>
         );
     }
+}
 
-
-
-    const mapStateToProps = (state) => ({
-        currentBoard: state.currentBoard,
-        socket: state.session.socket,
-        currentUser: state.session.currentUser,
+const mapStateToProps = (state) => ({
+    currentBoard: state.currentBoard,
+    socket: state.session.socket,
+    currentUser: state.session.currentUser,
 });
 
-    export default connect(mapStateToProps)(BoardsShowView);
+export default connect(mapStateToProps)(BoardsShowView);
