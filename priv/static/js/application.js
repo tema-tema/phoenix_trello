@@ -28040,8 +28040,10 @@
 
 	    LISTS_SHOW_FORM: 'LISTS_SHOW_FORM',
 
+	    SOCKET_CONNECTED: 'SOCKET_CONNECTED',
+
 	    CARD_MOVE: 'CARD_MOVE',
-	    CURRENT_CARD_FETHING: 'CURRENT_CARD_FETHING',
+	    CURRENT_CARD_FETCHING: 'CURRENT_CARD_FETCHING',
 	    CURRENT_CARD_RESET: 'CURRENT_CARD_RESET',
 	    CURRENT_CARD_SET: 'CURRENT_CARD_SET',
 	    CURRENT_CARD_EDIT: 'CURRENT_CARD_EDIT',
@@ -28949,7 +28951,7 @@
 	});
 	exports.setCurrentUser = setCurrentUser;
 
-	var _reactRouterRedux = __webpack_require__(249);
+	var _reduxSimpleRouter = __webpack_require__(262);
 
 	var _constants = __webpack_require__(264);
 
@@ -28982,7 +28984,8 @@
 	            channel: channel
 	        });
 	    });
-	};
+	}
+	// ...
 
 	var Actions = {
 	    signIn: function signIn(email, password) {
@@ -28997,7 +29000,7 @@
 	            (0, _utils.httpPost)('/api/v1/sessions', data).then(function (data) {
 	                localStorage.setItem('phoenixAuthToken', data.jwt);
 	                setCurrentUser(dispatch, data.user);
-	                dispatch(_reactRouterRedux.routeActions.push('/'));
+	                dispatch(_reduxSimpleRouter.routeActions.push('/'));
 	            }).catch(function (error) {
 	                error.response.json().then(function (errorJSON) {
 	                    dispatch({
@@ -29015,7 +29018,7 @@
 	                setCurrentUser(dispatch, data);
 	            }).catch(function (error) {
 	                console.log(error);
-	                dispatch(_reactRouterRedux.routeActions.push('/sign_in'));
+	                dispatch(_reduxSimpleRouter.routeActions.push('/sign_in'));
 	            });
 	        };
 	    },
@@ -29029,12 +29032,13 @@
 	                    type: _constants2.default.USER_SIGNED_OUT
 	                });
 
-	                dispatch(_reactRouterRedux.routeActions.push('/sign_in'));
+	                dispatch(_reduxSimpleRouter.routeActions.push('/sign_in'));
 	            }).catch(function (error) {
 	                console.log(error);
 	            });
 	        };
 	    }
+
 	};
 
 	exports.default = Actions;

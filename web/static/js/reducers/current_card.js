@@ -11,7 +11,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
-        case Constants.CURRENT_CARD_FETHING:
+        case Constants.CURRENT_CARD_FETCHING:
             return { ...state, fetching: true };
 
         case Constants.CURRENT_CARD_RESET:
